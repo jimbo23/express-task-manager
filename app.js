@@ -1,4 +1,7 @@
 require("./src/db/connect");
+// nodejs: if you require a module and that module doesn't export
+// any function, the function will be invoked however, if the
+// function is called in the module
 import express from "express";
 import { tasksRouter } from "./src/routes/tasksRoute";
 
