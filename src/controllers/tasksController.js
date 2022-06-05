@@ -5,8 +5,12 @@ export const getAllTasks = (req, res) => {
 };
 
 export const createTask = async (req, res) => {
-  const task = await TaskModel.create(req.body);
-  res.status(201).json({ task });
+  try {
+    const task = await TaskModel.create(req.body);
+    res.status(201).json({ task });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
 };
 
 export const getTask = (req, res) => {
