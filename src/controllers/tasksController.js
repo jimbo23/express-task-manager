@@ -33,8 +33,22 @@ export const getTask = async (req, res) => {
   }
 };
 
-export const updateTask = (req, res) => {
-  res.send("update task");
+export const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await TaskModel.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!task) {
+      return res.status(404).json({ msg: `Task ${id} not found!` });
+    }
+
+    res.status(201).json({ status: 201, data: task });
+  } catch (e) {
+    res.status(500).json({ msg: e });
+  }
 };
 
 export const deleteTask = async (req, res) => {
