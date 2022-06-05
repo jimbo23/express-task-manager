@@ -1,6 +1,7 @@
 import express from "express";
 import { tasksRouter } from "./src/routes/tasksRoute";
 import { connectDB } from "./src/db/connect";
+import { notFound } from "./src/middlewares/not-found";
 require("dotenv").config();
 
 const app = express();
@@ -10,11 +11,8 @@ const PORT = 3000;
 app.use(express.json());
 
 // routes
-app.get("/hello", (req, res) => {
-  res.send("Hello World");
-});
-
 app.use("/api/v1/tasks", tasksRouter);
+app.use(notFound);
 
 const start = async () => {
   try {
