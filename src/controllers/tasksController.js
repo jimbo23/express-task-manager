@@ -1,5 +1,6 @@
 import { TaskModel } from "../models/tasksModel";
 import { asyncWrapper } from "../middlewares/async";
+import { createCustomError } from "../errors/custom-error";
 
 export const getAllTasks = asyncWrapper(async (req, res) => {
   const tasks = await TaskModel.find({});
@@ -11,12 +12,12 @@ export const createTask = asyncWrapper(async (req, res) => {
   res.status(201).json({ task });
 });
 
-export const getTask = asyncWrapper(async (req, res) => {
+export const getTask = asyncWrapper(async (req, res, next) => {
   const { id } = req.params;
   const task = await TaskModel.findOne({ _id: id });
 
   if (!task) {
-    return res.status(404).json({ msg: `Task ${id} not found!` });
+    return next(createCustomError(`Task ${id} not found!`, 404));
   }
 
   res.status(200).json({ task });
