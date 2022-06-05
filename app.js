@@ -1,9 +1,6 @@
-require("./src/db/connect");
-// nodejs: if you require a module and that module doesn't export
-// any function, the function will be invoked however, if the
-// function is called in the module
 import express from "express";
 import { tasksRouter } from "./src/routes/tasksRoute";
+import { connectDB, connectionString } from "./src/db/connect";
 
 const app = express();
 const PORT = 3000;
@@ -18,4 +15,13 @@ app.get("/hello", (req, res) => {
 
 app.use("/api/v1/tasks", tasksRouter);
 
-app.listen(PORT, () => console.log(`listen to ${PORT}`));
+const start = async () => {
+  try {
+    await connectDB(connectionString);
+    app.listen(PORT, () => console.log(`listen to ${PORT}`));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+start();
