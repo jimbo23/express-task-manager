@@ -1,7 +1,12 @@
 import { TaskModel } from "../models/tasksModel";
 
-export const getAllTasks = (req, res) => {
-  res.send("get all tasks");
+export const getAllTasks = async (req, res) => {
+  try {
+    const tasks = await TaskModel.find({ completed: true });
+    res.status(200).json({ tasks });
+  } catch (err) {
+    res.status(500).json({ msg: err });
+  }
 };
 
 export const createTask = async (req, res) => {
@@ -9,7 +14,7 @@ export const createTask = async (req, res) => {
     const task = await TaskModel.create(req.body);
     res.status(201).json({ task });
   } catch (err) {
-    res.status(400).json({ err });
+    res.status(500).json({ msg: err });
   }
 };
 
